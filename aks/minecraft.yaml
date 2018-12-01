@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oh-minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oh-minecraft
+  template:
+    metadata:
+      labels:
+        app: oh-minecraft
+    spec:
+      containers:
+      - name: oh-minecraft
+        image: openhack/minecraft-server:2.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 2Gi
+          limits:
+            cpu: 250m
+            memory: 4Gi
+        env:
+          - name: EULA
+            value: "TRUE"
+        ports:
+        - containerPort: 25565
+          name: game
+        - containerPort: 25575
+          name: console
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oh-minecraft
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 25565
+    name: game
+  - port: 25575
+    name: console
+  selector:
+    app: oh-minecraft
