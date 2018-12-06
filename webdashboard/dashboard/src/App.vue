@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>{{ msg }}</h1>
+    <minecraft></minecraft>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import minecraft from './components/MinecraftServers.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    minecraft
+  },
+  data() {
+    return {
+      msg: 'Best Minecraft servers EVAR'
+    }
   }
 }
 </script>
