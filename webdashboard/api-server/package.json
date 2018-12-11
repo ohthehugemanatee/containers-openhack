@@ -9,6 +9,7 @@
   "author": "Campbell Vertesi <campbell@vertesi.com>",
   "license": "GPL-2.0-or-later",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "kubernetes-client": "^6.5.0"
   }
 }
