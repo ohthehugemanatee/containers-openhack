@@ -1,5 +1,10 @@
 <template>
   <div class="servers">
+    <ul v-if="errors && errors.length">
+      <li v-for="(error, index) in errors" :key="index">
+        {{error.message}}
+      </li>
+    </ul>
     <table>
       <thead>
         <tr>
@@ -9,10 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(server, index) in servers"
-          :key="index"
-          >
+        <tr v-for="(server, index) in servers" :key="index">
             <td>{{ server.name }}</td>
             <td>{{ server.endpoints.minecraft }}</td>
             <td>{{ server.endpoints.rcon }}</td>
@@ -24,28 +26,26 @@
 
 <script>
 //import store from '../store';
+import axios from 'axios';
+
 export default {
-	data() {
+  data() {
     return {
-      servers: [
-        {
-          name: 'Dummy server',
-          endpoints: {
-            minecraft: '10.0.0.1:25565',
-            rcon: '10.0.0.1:25575'
-          }
-        },
-        {
-          name: 'Another server',
-          endpoints: {
-            minecraft: '10.0.0.2:25565',
-            rcon: '10.0.0.2:25575'
-          }
-        }
-      ]
+      servers: [],
+      errors: []
     }
-	//computed: { servers: () => store.state.servers },
+  },
+
+  // Fetches servers when the component is created.
+  async created() {
+    try {
+      const response = await axios.get('http://127.0.0.1:3000/servers')
+      this.servers = response.data
+    } catch (e) {
+      this.errors.push(e)
+    }
   }
+  //computed: { servers: () => store.state.servers },
 }
 </script>
 
