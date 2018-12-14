@@ -18,6 +18,9 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: oh-minecraft
+  annotations:
+    service-per-pod-label: "pod-name"
+    service-per-pod-ports: "25565:25565"
 spec:
   replicas: 3
   selector:
@@ -28,6 +31,8 @@ spec:
     metadata:
       labels:
         app: oh-minecraft
+      annotations:
+        pod-name-label: "pod-name"
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -62,16 +67,16 @@ spec:
           requests:
             storage: 5Gi
 ---
-apiVersion: v1
-kind: Service
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
 metadata:
-  name: oh-minecraft
+  name: minecraft
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 25565
-    name: game
-  - port: 25575
-    name: console
-  selector:
-    app: oh-minecraft
+  maxReplicas: 10
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1beta2
+    kind: StatefulSet
+    name: minecraft
+  targetCPUUtilizationPercentage: 50
+
