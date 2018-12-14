@@ -18,17 +18,23 @@ async function getServers() {
   const config = require('kubernetes-client').config
   const client = new Client({ config: config.fromKubeconfig(path), version: '1.10' })
   const services = await client.api.v1.namespaces('default').services.get()
-  var response = services.body.items.map(service => {
+  var response = [];
+  for (var i = 0; i < services.body.items.length; i++) {
+    var service = services.body.items[i];
     if (service.spec.type === 'LoadBalancer') {
-      return {
-        name: 'Dummy name',
-        endpoints: {
-          minecraft: service.status.loadBalancer.ingress[0].ip + ':25565',
-          rcon: service.status.loadBalancer.ingress[0].ip + ':25575'
-        }
+      const ipAddress = service.status.loadBalancer.ingress[0].ip;
+      var axios = require('axios');
+      const mcResponse = await axios.get('https://mcapi.us/server/status?ip=' + ipAddress);
+      response.push({
+          name: mcResponse.data.server.name,
+          endpoints: {
+            minecraft: ipAddress + ':25565',
+            rcon: ipAddress + ':25575'
+          }
+        });
       }
     }
-  }).filter(Boolean);
+  //.filter(Boolean);
   return response;
 }
 

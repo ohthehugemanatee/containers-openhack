@@ -9,7 +9,9 @@
   "author": "Campbell Vertesi <campbell@vertesi.com>",
   "license": "GPL-2.0-or-later",
   "dependencies": {
+    "axios": "^0.18.0",
     "express": "^4.16.4",
-    "kubernetes-client": "^6.5.0"
+    "kubernetes-client": "^6.5.0",
+    "minecraft-wrapper": "^1.1.1"
   }
 }
