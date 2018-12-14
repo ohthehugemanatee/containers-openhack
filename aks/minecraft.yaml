@@ -19,7 +19,7 @@ kind: StatefulSet
 metadata:
   name: oh-minecraft
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: oh-minecraft
